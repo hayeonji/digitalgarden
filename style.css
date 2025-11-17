@@ -1,0 +1,904 @@
+@font-face {
+  font-family: 'NeoDonggeunmo';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.3/NeoDunggeunmo.woff') format('woff');
+  font-weight: normal;
+  font-display: swap;
+}
+
+/* 뷰포트 고정 + 스크롤 금지 */
+html, body {
+  font-family: 'NeoDonggeunmo', sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;              /* 스크롤 막기 */
+}
+
+/* 모바일 안전 vh 사용 */
+.landing-wrap{
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+}
+@supports (min-height: 100dvh){
+  .landing-wrap{ min-height: 100dvh; }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+/* --- Landing 전용 --- */
+
+.landing-card{
+  display: grid;
+  gap: 14px; /* 12 → 살짝 키움 */
+  justify-items: center;
+  max-width: 100vw;
+  max-height: 100%;         /* 부모 높이 내에서 배치 */
+}
+
+/* 로고: 상한치만 1.2배 */
+/* 로고: 상한치만 1.2배 */
+.land-logo{
+   width: min(150vw, 800px); 
+  height: auto;
+  display: block;
+  
+  /* [!! 신규 !!] 왼쪽으로 5% (혹은 -30px 등) 이동시킵니다. */
+  transform: translateX(2%);
+}
+
+/* 이름 박스 */
+.namebox{
+  position: relative;
+  width: min(86vw, 600px);  /* 560 * 1.2 */
+  aspect-ratio: 560 / 140;
+  background: url("./assets/ui/landing/box_idle.svg") center/contain no-repeat;
+}
+
+/* 입력 필드 */
+.namebox input{
+  font-family: 'NeoDonggeunmo';
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 58%;                          /* 박스 대비 약간 아래 */
+  transform: translateY(-50%);
+  height: clamp(44px, 8.6vw, 53px);  /* 1.2배 범위 */
+
+  background: transparent;
+  border: none;
+  outline: none;
+
+  text-align: center;
+  font-size: clamp(18px, 3.6vw, 20px);
+  line-height: 1.2;
+  color: #222;
+}
+
+/* 버튼: 이미지 유지, hover 축소만 */
+.box-btn{
+  position: absolute;
+  top: 40%;
+  left: 88%;
+  transform: translateX(-50%);
+  /* bottom 값은 제거 – 상단 기준 배치 명확화 */
+
+  width: clamp(144px, 28.8vw, 240px); /* 1.2배 */
+  height: clamp(48px, 10vw, 53px);
+
+  background: transparent url("./assets/ui/landing/btn_idle.svg") center/contain no-repeat;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  z-index: 2;
+
+  transition: transform .15s ease;
+}
+.box-btn:hover{
+  transform: translateX(-50%) scale(0.9);
+}
+
+/* --- Landing 전용 끝 --- */
+
+/* --- Opening 전용 --- */
+
+/* 1. 전체 화면을 채우는 배경 래퍼 */
+.opening-wrap {
+  width: 100%;
+  height: 100vh;
+  /* JS가 이 배경을 덮어씁니다. (기본 검은색) */
+  background: black center/cover no-repeat;
+  
+  /* !! 중요 !! : (클릭 시) 배경이 바뀔 때 부드러운 효과 */
+  transition: background-image 0.5s ease-in-out;
+  
+  position: relative;
+  overflow: hidden;
+}
+@supports (height: 100dvh) {
+  .opening-wrap {
+    height: 100dvh;
+  }
+}
+
+/* 2. 하단 대화 상자 카드 */
+.opening-card {
+  position: absolute;
+  bottom: 2%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(95%, 1000px);
+  aspect-ratio: 1000 / 250; /* !! 중요 !! : 텍스트 박스 이미지 비율 */
+  
+  /* (A) 기본 배경 이미지 (텍스트 박스) */
+  /* !! 경로 수정 !! : 기본 텍스트 박스 이미지 */
+  background: url('./assets/ui/opening/textbox.png') center/contain no-repeat;
+  
+  /* !! 중요 !! : (호버 시) 텍스트 박스 이미지가 바뀔 때 부드러운 효과 */
+  transition: background-image 0.1s ease-in-out;
+
+  /* (수정됨) 텍스트는 위로, 옵션은 아래로 배치 */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; 
+  padding: 4% 6%;
+  box-sizing: border-box;
+  z-index: 2;
+}
+
+/* (B) !! 다시 추가됨 !! :has()를 이용한 호버 효과 */
+
+/* ID가 'opt-left'인 자식에 호버하면 -> 부모 .opening-card의 배경 변경 */
+.opening-card:has(#opt-left:hover) {
+  /* !! 경로 수정 !! : 왼쪽 호버 텍스트 박스 이미지 */
+  background-image: url('./assets/ui/opening/textbox_hover1.png');
+}
+
+/* ID가 'opt-left'인 자식에 호버하면 -> 부모 .opening-card의 배경 변경 */
+.opening-card:has(#opt-right:hover) {
+  /* !! 경로 수정 !! : 오른쪽 호버 텍스트 박스 이미지 */
+  background-image: url('./assets/ui/opening/textbox_hover2.png');
+}
+
+/* ... (다른 .opening-wrap, .opening-card 등은 동일) ... */
+
+/* 3. 텍스트 및 옵션 영역 */
+.opening-text {
+  text-align: center;
+  font-size: clamp(16px, 2.5vw, 20px);
+  color: #454545;
+  min-height: 3em;
+  display: grid;
+  place-content: center;
+}
+.opening-text p {
+  margin: 0;
+  line-height: 1.5;
+  word-break: keep-all;
+  letter-spacing: -0.05em;
+}
+
+.opening-options {
+  display: flex;
+  height: 30%;
+  width: 100%;
+}
+
+/* [!! 1. 수정 !!]
+   모든 .option-zone의 기본값은 '완벽한 중앙 정렬'로 되돌립니다.
+   (game1, game2, game3 등은 이 스타일을 사용합니다)
+*/
+.option-zone {
+  flex: 1;
+  display: grid;
+  place-items: center; /* [!!] 'padding-top' 삭제, 'place-items' 복원 */
+  font-size: clamp(16px, 2.5vw, 20px);
+  color: #454545;
+  min-height: 1.5em;
+  user-select: none;
+  cursor: pointer;
+padding-top: 0.4em;
+}
+
+/* [!! 2. 신규 !!]
+   'opening' 화면(.opening-wrap) 내부의 .option-zone에만
+   특별히 'padding-top'을 적용하여 수동 정렬합니다.
+*/
+.opening-wrap .option-zone {
+  align-items: start; /* place-items: center를 덮어씀 */
+  padding-top: 0.4em;
+   /* 'opening.png' 이미지의 선에 맞춘 값 */
+}
+
+/* ... (이하 .opening-video 등은 동일) ... */
+/* 4. 비디오 스타일 (이전과 동일) */
+.opening-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: 1;
+  object-fit: cover;
+}
+
+/* --- Opening 전용 끝 --- */
+/* --- Loading 전용 --- */
+
+/* 1. 전체 화면 래퍼 (Grid 제거) */
+.loading-wrap {
+  width: 100%;
+  height: 100vh;
+  position: relative; /* 자식 요소(absolute)의 기준점 */
+  overflow: hidden;
+}
+@supports (height: 100dvh){
+  .loading-wrap { height: 100dvh; }
+}
+
+/* 2. 배경 비디오 (꽉 채우기) */
+.loading-bg-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; 
+  z-index: 1;
+  /* filter: brightness(0.7);  */
+}
+
+/* 3. 중앙 컨텐츠 래퍼 (수동 중앙 정렬) */
+.loading-content-wrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* 정중앙 배치 */
+  
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+/* 4. [유저네임] 텍스트 */
+.loading-text {
+  font-size: 1.5em;
+  color: rgb(45, 45, 45);
+
+}
+
+/* 5. 중앙 GIF */
+.loading-gif {
+  width: 600px;
+  height: auto;
+  max-height: 100px;
+}
+
+/* 6. [!! 수정 !!] 좌측 UI (요청대로 좌측 하단) */
+.loading-ui-corner-wrap {
+  position: absolute;
+  left: 50px;
+  
+  /* [!! 수정 !!] 'top: 50%' -> 'bottom: 20px'로 되돌림 */
+  bottom: 50px;
+  /* transform: translateY(-50%); (삭제) */
+
+  z-index: 10;
+  width: 700px; /* (!! 조절 !!) UI 이미지 너비 */
+}
+
+/* 7. UI 배경 이미지 */
+.loading-ui-corner-wrap .loading-ui-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* 8. UI 텍스트 */
+.loading-ui-corner-wrap .loading-ui-text {
+  position: absolute;
+  top: 45px;
+  left: 60px;
+  right: 20px;
+  font-size: 1.1em;
+  color: rgb(45, 45, 45);
+  margin: 0;
+
+  line-height: 1.5;
+  word-break: keep-all;
+  letter-spacing: -0.05em;
+  
+}
+
+/* --- Loading 전용 끝 --- */
+/* --- Game 1 전용 --- */
+
+/* 1. Game 1 전체 래퍼 (배경 이미지 고정) */
+.game1-wrap {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  /* !! 경로 수정 !! : '이미지 5' 파일의 실제 경로 */
+  background: url('./assets/bg/game1/image/house1.1.png') center/cover no-repeat;
+  overflow: hidden; /* 꽉 찬 비디오가 넘칠 경우 대비 */
+}
+@supports (min-height: 100dvh){
+  .game1-wrap { min-height: 100dvh; }
+}
+
+/* (삭제) .game1-wrap.video-mode { ... } 규칙 제거됨 */
+
+
+/* 2. 대화 박스 (opening-card 스타일 재사용) */
+.game1-wrap .opening-card {
+  z-index: 20; /* 중간 레이어 */
+  /* (중요) position: relative 제거됨 */
+}
+
+
+/* 3. 비디오 재생 버튼 */
+.video-play-button {
+  /* position: absolute; 제거 -> grid 아이템으로 중앙 정렬 */
+  /* bottom, left, transform 제거 */
+  
+  width: 70px; /* !! 조절 !! : 버튼 이미지 크기 */
+  height: 70px; /* !! 조절 !! : 버튼 이미지 크기 */
+  
+  /* !! 경로 수정 !! : 기본 버튼 이미지 */
+  background: url('./assets/ui/game1/redbutton.png') center/contain no-repeat;
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 20px;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+  user-select: none;
+  transition: background-image 0.1s ease-in-out;
+  flex-direction: column;
+  gap: 5px;
+  
+  z-index: 30; /* 맨 앞 레이어 */
+}
+
+/* 비디오 재생 버튼 호버 시 */
+.video-play-button.hover {
+  /* !! 경로 수정 !! : 호버 시 버튼 이미지 */
+  /*background-image: url('./assets/ui/game1/button_hover.png');*/
+  transform: scale(0.9); 
+}
+
+
+/* 4. 비디오 플레이어 스타일 */
+.game1-video-player {
+  position: absolute; /* .game1-wrap(grid) 기준 */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  
+  /* [!! 1번 수정 !!] 꽉 채우기 (중앙 정렬) */
+  object-fit: cover; 
+  
+  background-color: black; /* 비디오 로딩 중 배경색 */
+  
+  /* [!! 2번 수정 !!] JS가 제어할 기본값 */
+  z-index: 10; 
+}
+
+/* --- Game 1 전용 끝 --- */
+/* --- Game 2 전용 --- */
+
+/* 1. Game 2 전체 래퍼 (배경 이미지는 JS가 제어) */
+.game2-wrap {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  
+  /* [!! 수정 !!] JS가 아닌 CSS가 초기 배경(room1.png)을 설정 */
+  background: url('./assets/bg/game2/room1.png') center/cover no-repeat;
+  
+  /* (삭제) JS가 배경을 바꾸지 않으므로 transition 제거 */
+  /* transition: background-image 0.5s ease-in-out; */
+  
+  overflow: hidden; /* 비디오가 넘칠 경우 대비 */
+}
+@supports (min-height: 100dvh){
+  .game2-wrap { min-height: 100dvh; }
+}
+
+/* 2. 쪽지 UI 컨테이너 (왼쪽 상단 고정) */
+.game2-wrap .note-container {
+  position: absolute; 
+  top: 30px; 
+  left: 30px;
+  z-index: 40; /* 높게 (드래그 게임보다 위) */
+}
+/* ... (쪽지 내부 스타일은 동일) ... */
+.game2-wrap #folded-note {
+  width: 80px; height: auto; cursor: pointer; transition: transform 0.2s ease;
+}
+.game2-wrap #folded-note:hover { transform: scale(1.1); }
+.game2-wrap #unfolded-note-area {
+  position: relative; width: 400px; height: 500px;
+  background: url('./assets/ui/game2/letter_closed.png') center/contain no-repeat;
+}
+.game2-wrap #note-close-btn {
+  position: absolute; top: 15px; right: 30px; 
+  width: 30px; height: 30px; cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.game2-wrap #note-close-btn:hover { transform: scale(1.1) rotate(90deg); }
+
+/* [!! 신규 !!] 대화창 z-index 설정 */
+.game2-wrap .opening-card {
+    z-index: 50; /* 맨 위 (쪽지보다도 위) */
+}
+
+
+/* --- Game 2 : 드래그 앤 드롭 UI --- */
+
+/* (7, 8, 9, 10번 스타일은 이전과 동일) */
+.game2-wrap #drag-game-container {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  z-index: 30;
+}
+.game2-wrap #dragging-item {
+  position: fixed; width: 200px; height: 200px;
+  object-fit: contain; pointer-events: none;
+  z-index: 9999; transform: translate(-60%, -60%);
+}
+.game2-wrap .drag-source, 
+.game2-wrap .drag-target {
+  position: absolute;
+  /* (디버깅용) border: 2px solid red; */
+  border-radius: 50%;
+}
+.game2-wrap .drag-source.active, 
+.game2-wrap .drag-target.active {
+  cursor: grab;
+  box-shadow: 0 0 20px 8px gold;
+  border-radius: 50%; 
+  animation: pulse 2s infinite;
+}
+/* @keyframes pulse는 이미 있으므로 중복 선언 안 함 */
+
+
+/* [!! 11. 수정 !!] 6개 출발지, 4개 도착지 위치 */
+
+/* --- 6x Sources (출발지) --- */
+/* (이전 6단계 위치와 동일 - CSS 충돌을 피하기 위해 `data-color` 대신 ID 사용) */
+.game2-wrap #source-red { top: 75%; left: 28%; width: 15%; height: 30%; }
+.game2-wrap #source-pink  { top: 47%; left: 8%; width: 10%; height: 20%; }
+.game2-wrap #source-blue_floor { top: 85%; left: 15%; width: 10%; height: 20%; }
+.game2-wrap #source-blue_top { top: 55%; left: 9%; width: 10%; height: 20%; } /* (임시) */
+.game2-wrap #source-green { top: 67%; left: 38%; width: 30%; height: 30%; }
+.game2-wrap #source-yellow { top: 50%; left: 30%; width: 15%; height: 15%; }
+
+/* --- 4x Targets (도착지) --- */
+/* (!! 위치 수정 필수 !!) */
+/* 1. 빨강 서랍 (Red Drawer) */
+.game2-wrap #target-red_drawer { top: 45%; left: 70%; width: 25%; height: 35%; }
+/* 2. 분홍 서랍 (Pink Drawer) - (임의 지정) */
+.game2-wrap #target-pink_drawer { top: 40%; left: 63%; width: 15%; height: 25%; }
+/* 3. 쓰레기통 (Trashcan) - (이미지의 파란색 2번 박스) */
+.game2-wrap #target-trashcan { top: 35%; left: 43%; width: 10%; height: 25%; }
+/* 4. 쿠키통 (Cookie Jar) - (이미지의 초록색 2번 박스) */
+.game2-wrap #target-cookiejar { top: 10%; left: 52%; width: 20%; height: 30%; }
+
+
+/* 12. 비디오 플레이어 (중앙 정렬 꽉 채우기) */
+.game2-wrap .game2-video-player {
+  position: absolute; top: 0; left: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  background-color: black;
+  z-index: 10;
+}
+/* --- Game 3 전용 --- */
+
+/* 1. Game 3 전체 래퍼 (배경 이미지는 JS가 제어) */
+.game3-wrap {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  /* [!! 신규 !!] 첫 번째 드래그 배경(opening.png)을 기본 배경으로 설정 */
+  background: url('./assets/bg/game3/image/opening.png') center/cover no-repeat;
+  overflow: hidden; /* 비디오가 넘칠 경우 대비 */
+}
+@supports (min-height: 100dvh){
+  .game3-wrap { min-height: 100dvh; }
+}
+
+/* 2. 비디오 플레이어 (z-index: 10) */
+.game3-wrap .game3-video-player {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 꽉 채우기 (중앙 정렬) */
+  background-color: black;
+  z-index: 10; /* 맨 뒤 (배경 역할) */
+}
+
+/* [!! 신규 !!] 대화창 z-index 설정 */
+.game3-wrap .opening-card {
+    z-index: 50; /* 맨 위 */
+}
+
+/* 3. 드래그 게임 컨테이너 (z-index: 30) */
+.game3-wrap #drag-game-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 30; /* 중간 (비디오보다 위) */
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding-bottom: 5%;
+  pointer-events: none;
+}
+
+/* 4. 드래그할 아이템 (z-index: 100) */
+.game3-wrap #draggable-item {
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 500px; /* !! 조절 !! */
+  height: auto;
+  cursor: grab;
+  z-index: 100;
+  pointer-events: auto;
+}
+.game3-wrap #draggable-item.dragging {
+  cursor: grabbing;
+  z-index: 9999;
+}
+
+
+/* 5. 드래그 타겟 영역 (z-index: 50) */
+.game3-wrap #drag-target-area {
+  position: absolute;
+  /* (디버깅용) border: 2px dashed rgba(0, 0, 255, 0.7); */
+  background-color: rgba(0, 0, 255, 0.2);
+  pointer-events: auto;
+  z-index: 50;
+}
+
+/* 6. 활성화된 타겟 영역 시각적 힌트 */
+.game3-wrap #drag-target-area.active {
+  box-shadow: 0 0 15px 5px rgb(0, 255, 255);
+  animation: pulse-blue 1.5s infinite;
+}
+/* @keyframes pulse-blue는 이미 정의됨 (game2에서) */
+
+/* --- Game 3 전용 끝 --- */
+
+/* --- Ending 전용 --- */
+
+/* 1. Ending 전체 래퍼 (기본 배경) */
+.ending-wrap {
+  display: grid; 
+  place-items: center;
+  min-height: 100vh;
+  background: black; 
+  overflow: hidden;
+  position: relative; 
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  transition: background-image 0.5s ease-in-out;
+}
+@supports (min-height: 100dvh){
+  .ending-wrap { min-height: 100dvh; }
+}
+
+/* 2. 비디오 플레이어 (z-index: 10) */
+.ending-video-player {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background-color: black;
+  z-index: 10; 
+}
+
+/* 3. 대화창 z-index 설정 (Step 1, 2 재사용) */
+.ending-wrap .opening-card {
+    z-index: 50; 
+}
+
+/* 3-1. [!! 1. 수정 !!] 대화창 옵션 텍스트가 보이도록 수정 */
+.ending-wrap .option-zone span {
+    /* (display: none; 삭제됨) */
+    color: #454545; /* (opening.css에서 상속) */
+}
+
+/* 4. [!! 2, 3. 수정 !!] Step 3 UI (컨테이너) */
+.ending-ui-step3 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 20; 
+  display: none; /* JS가 켬 */
+  
+  /* [!!] 자식(.partial-background)을 중앙 정렬하기 위해 추가 */
+  display: grid;
+  place-items: center;
+}
+
+/* 4-1. [!! 3. 수정 !!] Step 3 - 부분 배경 이미지 (부모 컨테이너) */
+.ending-ui-step3 .partial-background {
+    /* [!!] 자식 요소의 기준점이 되도록 relative 설정 */
+    position: relative; 
+    
+    width: 40%;
+    height: 60%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 15px;
+    z-index: 21; 
+    
+    /* [!!] 자식 요소들을 flex로 정렬 (중앙 배치) */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px; /* 요소들 사이 간격 */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* 4-2. [!! 3. 수정 !!] Step 3 - 중앙 텍스트 (자식) */
+.ending-ui-step3 .ending-center-text {
+  /* [!!] 부모(.partial-background)의 flex 정렬을 따름 */
+  position: relative; 
+  top: auto;
+  left: auto;
+  transform: none;
+  
+  color: rgb(45, 45, 45);
+  font-size: 1.7em; 
+    line-height: 1.5;
+  word-break: keep-all;
+  letter-spacing: -0.05em;
+  text-align: center;
+  width: 90%;
+  z-index: 22;
+  flex-shrink: 0; /* 찌그러지지 않게 */
+}
+
+/* 4-3. [!! 3. 수정 !!] Step 3 - 작은 이미지 (자식) */
+.ending-ui-step3 .ending-small-image {
+    /* [!!] 부모(.partial-background)의 flex 정렬을 따름 */
+    position: relative; 
+    top: auto;
+    left: auto;
+    transform: none;
+
+    width: 150px;
+    height: auto;
+    z-index: 22;
+    flex-shrink: 0;
+}
+
+/* 4-4. [!! 3. 수정 !!] Step 3 - 이미지 버튼 (자식) */
+.ending-ui-step3 .ending-button {
+  /* [!!] 부모(.partial-background)의 flex 정렬을 따름 */
+  position: relative;
+  bottom: auto; 
+  left: auto;
+  transform: none; /* translateX(-50%) 제거 */
+
+  width: 220px; 
+  height: 100px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center; 
+  cursor: pointer;
+  transition: background-image 0.2s ease-in-out, transform 0.2s ease;
+  z-index: 22;
+  flex-shrink: 0;
+}
+
+/* 4-5. 3D로 가기 버튼 이미지 및 호버 */
+.ending-ui-step3 #btn-go-to-3d {
+  background-image: url('./assets/ui/ending/btn.png');
+}
+.ending-ui-step3 #btn-go-to-3d:hover {
+  background-image: url('./assets/ui/ending/btn_hover.png'); 
+  transform: scale(0.95); /* [!!] translateX 제거 */
+}
+
+/* --- Ending 전용 끝 --- */
+/* --- Upload3D 전용 --- */
+
+/* 1. 화면 전체를 채우는 래퍼 (배경 이미지 유지) */
+.upload3d-wrap {
+  min-height: 100vh; 
+  box-sizing: border-box;
+  /* [!! 수정 !!] padding 제거 (UI를 모서리에 붙이기 위해) */
+  /* padding: 10px; */ 
+  
+  display: flex;
+  flex-direction: column;
+  background: url('./assets/bg/sky/sky1_upscayl.png') center/cover no-repeat;
+  
+  /* [!! 신규 !!] 자식 UI를 위한 position 기준 */
+  position: relative; 
+  overflow: hidden;
+}
+@supports (min-height: 100dvh){
+  .upload3d-wrap { min-height: 100dvh; }
+}
+
+/* 2. #stage가 꽉 차도록 설정 */
+.upload3d-wrap #stage {
+  flex-grow: 1; 
+  width: 100%;
+  /* [!! 수정 !!] border 등 장식 제거 (배경과 통합) */
+  /* border: 1px dashed #999; */
+  /* border-radius: 12px; */
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  min-height: 200px;
+  background: unset; 
+}
+.upload3d-wrap #stage canvas,
+.upload3d-wrap #stage img {
+    width: 100%;
+    height: 100%;
+}
+
+/* [!! 신규 !!] 3. 상단 문구 */
+.upload-top-text {
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  
+  color: rgb(45, 45, 45);
+  font-size: 1.8em;
+  text-shadow: 1px 1px 2px rgba(255,255,255,0.5);
+}
+
+/* [!! 신규 !!] 4. 좌측 하단 UI (Tip) */
+.upload-bottom-left-ui {
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+  z-index: 10;
+  
+  width: 300px; /* (조절) UI 이미지 너비 */
+  position: relative;
+}
+.upload-bottom-left-ui img {
+  width: 100%;
+  height: auto;
+}
+.upload-bottom-left-ui p {
+  position: absolute;
+  top: 50%; /* (조절) 텍스트 위치 */
+  left: 50%; /* (조절) 텍스트 위치 */
+  transform: translate(-50%, -50%);
+  
+  margin: 0;
+  font-size: 1.1em;
+  color: rgb(45, 45, 45);
+  width: 80%;
+  text-align: center;
+}
+
+/* [!! 신규 !!] 5. 우측 하단 UI (버튼 2개) */
+.upload-bottom-right-ui {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  z-index: 10;
+  
+  display: flex;
+  flex-direction: column; /* 버튼을 세로로 배치 */
+  gap: 10px;
+}
+.upload-button {
+  width: 150px; /* (조절) 버튼 크기 */
+  height: 60px; /* (조절) 버튼 크기 */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.upload-button:hover {
+  transform: scale(1.1);
+}
+/* (!! 경로 수정 !!) */
+#btn-show-images {
+  background-image: url('./assets/ui/upload3d/btn_images_idle.png');
+}
+#btn-go-landing {
+  background-image: url('./assets/ui/upload3d/btn_landing_idle.png');
+}
+
+/* [!! 신규 !!] 6. 이미지 슬라이더 (전체 화면 오버레이) */
+.upload-image-slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.8); /* 반투명 검은 배경 */
+  
+  display: grid; /* JS가 none -> grid로 변경 */
+  grid-template-columns: 100px 1fr 100px; /* 이전 / 이미지 / 다음 */
+  align-items: center;
+  justify-items: center;
+}
+#slider-image {
+  max-width: 90%;
+  max-height: 90vh;
+  object-fit: contain;
+  background: #111;
+  border-radius: 8px;
+}
+.slider-nav {
+  font-size: 4em;
+  color: white;
+  cursor: pointer;
+  user-select: none;
+  padding: 20px;
+}
+.slider-close-btn {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 2.5em;
+  color: white;
+  cursor: pointer;
+  user-select: none;
+  z-index: 101;
+}
+
+/* --- Upload3D 전용 끝 --- */
+
+/* 3. #stage 내부의 캔버스나 이미지도 꽉 차게 */
+.upload3d-wrap #stage canvas,
+.upload3d-wrap #stage img {
+    width: 100%;
+    height: 100%;
+}
+/* [!!] 해결 방법 [!!]
+  game2뿐만 아니라, game3와 ending도 
+  강제로 중앙 정렬로 되돌립니다.
+*/
+
+
+.game3-wrap .option-zone,
+.ending-wrap .option-zone {
+
+ /* 상단 정렬(align-items: start)을 덮어쓰고 중앙 정렬로 복원 */
+  place-items: center; 
+
+ /* 불필요한 padding-top 제거 */
+ padding-top: 0; 
+ align-items: start; /* place-items: center를 덮어씀 */
+  padding-top: 0.7em;
+}

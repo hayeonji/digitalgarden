@@ -164,6 +164,7 @@ html, body {
 
 /* 3. 텍스트 및 옵션 영역 */
 .opening-text {
+  padding-top: 60px;
   text-align: center;
   font-size: clamp(16px, 2.5vw, 20px);
   color: #454545;
@@ -475,7 +476,7 @@ html, body {
 .game2-wrap .drag-target.active {
   cursor: grab;
   box-shadow: 0 0 20px 8px rgb(255, 244, 180,0.2);
-  border-radius: 50%; 
+  border-radius: 0%; 
   animation: pulse 10s infinite;
 }
 /* @keyframes pulse는 이미 있으므로 중복 선언 안 함 */
@@ -517,7 +518,7 @@ html, body {
     /* (기존 스타일 유지) */
     pointer-events: none; /* ✨ 평소에는 클릭 방지 */
     /* (디버깅용) border: 2px solid red; */
-    border-radius: 50%;
+    border-radius: 0%;
 }
 
 .game2-wrap .drag-source.active {

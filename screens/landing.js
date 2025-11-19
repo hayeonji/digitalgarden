@@ -11,7 +11,7 @@ export default {
 
         <!-- 이름 박스 (hover/focus 시에도 이미지 유지) -->
         <div class="namebox" id="namebox">
-          <input id="nick" type="text" placeholder="2글자 이내의 한글로 작성해주세요" autocomplete="off" />
+          <input id="nick" type="text" placeholder="닉네임을 적어주세요!" autocomplete="off" />
           <button class="box-btn" id="go" aria-label="접속하기"></button>
         </div>
 

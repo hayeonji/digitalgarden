@@ -7,7 +7,7 @@ export default {
     // 1-1. 대화 2단계
     const dialogueSteps = [
       { dialogue: '이런, 제가 잠시 자리를 비운 사이에 집 안이 온갖 메일과 쿠키로 가득 차버렸어요.', leftText: '헉 어떡해?', rightText: '정말 더럽다' },
-      { dialogue: '제 정리 수칙에 따라, 메일과 쿠키를 적절한 위치로 옮겨 정리해 주실 수 있을까요?', leftText: '알겠어!', rightText: '어떻게?' }
+      { dialogue: '제 정리 수칙에 따라, 메일과 쿠키를 적절한 위치로 옮겨 정리해 주실 수 있을까요?', leftText: '알겠어!', rightText: '웅웅' }
     ];
     let currentDialogueStep = 0;
 
@@ -39,15 +39,15 @@ export default {
     // 1-3. 최종 단계들 (좌/우 텍스트 분리)
     const finalStep1 = {
       dialogue: '집이 정말 깨끗해져서 기분이 아주 좋아요. 정원도 무럭무럭 자라고 있어요.',
-      leftText: '계속하기',
+      leftText: '꺅꺅',
       rightText: '잘했다!',
       video: './assets/bg/game2/video/game2flower.mp4',
       image: './assets/bg/game2/image/end.png'
     };
     const finalStep2 = {
-      dialogue: '정원의 다음 장소로 이동합니다. (대화창 2)',
-      leftText: '이동하기',
-      rightText: '이동하기'
+      dialogue: '이제, 집 안쪽으로 더 들어가 볼게요.',
+      leftText: '가보자!',
+      rightText: '좋아좋아'
     };
 
     // 1-4. 비디오 재생 중복 방지 플래그

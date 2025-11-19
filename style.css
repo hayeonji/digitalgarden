@@ -39,7 +39,7 @@ html, body {
 /* 로고: 상한치만 1.2배 */
 /* 로고: 상한치만 1.2배 */
 .land-logo{
-   width: min(150vw, 800px); 
+   width: min(140vw, 100vh); 
   height: auto;
   display: block;
   
@@ -180,7 +180,7 @@ html, body {
 
 .opening-options {
   display: flex;
-  height: 30%;
+  height: 40%;
   width: 100%;
 }
 
@@ -191,24 +191,35 @@ html, body {
 .option-zone {
   flex: 1;
   display: grid;
-  place-items: center; /* [!!] 'padding-top' 삭제, 'place-items' 복원 */
+  
+  /* 수평 중앙, 수직 상단 정렬 */
+  justify-items: center; 
+  align-items: start;
+  
+  /* 폰트 설정 */
   font-size: clamp(16px, 2.5vw, 20px);
   color: #454545;
   min-height: 1.5em;
   user-select: none;
   cursor: pointer;
-padding-top: 0.4em;
+  
+  /* [!! 핵심 수정 !!] 
+     em 대신 % 단위를 사용해야 배경 이미지 비율과 
+     똑같이 움직여서 위치가 깨지지 않습니다.
+     
+     (값 조절 팁: 1% ~ 3% 사이에서 줄 위치가 딱 맞는 값을 찾아보세요) 
+  */
+  padding-top: 2%; 
 }
-
 /* [!! 2. 신규 !!]
    'opening' 화면(.opening-wrap) 내부의 .option-zone에만
    특별히 'padding-top'을 적용하여 수동 정렬합니다.
 */
-.opening-wrap .option-zone {
-  align-items: start; /* place-items: center를 덮어씀 */
+/* .opening-wrap .option-zone {
+  align-items: start; 
   padding-top: 0.4em;
-   /* 'opening.png' 이미지의 선에 맞춘 값 */
-}
+   
+} */
 
 /* ... (이하 .opening-video 등은 동일) ... */
 /* 4. 비디오 스타일 (이전과 동일) */
@@ -336,8 +347,8 @@ padding-top: 0.4em;
 
 /* 2. 대화 박스 (opening-card 스타일 재사용) */
 .game1-wrap .opening-card {
-  z-index: 20; /* 중간 레이어 */
-  /* (중요) position: relative 제거됨 */
+  z-index: 20; 
+ 
 }
 
 
@@ -463,9 +474,9 @@ padding-top: 0.4em;
 .game2-wrap .drag-source.active, 
 .game2-wrap .drag-target.active {
   cursor: grab;
-  box-shadow: 0 0 20px 8px gold;
+  box-shadow: 0 0 20px 8px rgb(255, 244, 180,0.2);
   border-radius: 50%; 
-  animation: pulse 2s infinite;
+  animation: pulse 10s infinite;
 }
 /* @keyframes pulse는 이미 있으므로 중복 선언 안 함 */
 
@@ -500,6 +511,36 @@ padding-top: 0.4em;
   object-fit: cover;
   background-color: black;
   z-index: 10;
+}
+.game2-wrap .drag-source {
+    position: absolute;
+    /* (기존 스타일 유지) */
+    pointer-events: none; /* ✨ 평소에는 클릭 방지 */
+    /* (디버깅용) border: 2px solid red; */
+    border-radius: 50%;
+}
+
+.game2-wrap .drag-source.active {
+    pointer-events: auto; /* ✨ 활성화된 요소만 클릭 허용 */
+    cursor: grab;
+    box-shadow: 0 0 20px 8px gold;
+    border-radius: 50%; 
+    animation: pulse 10s infinite;
+}
+/* 이 코드가 pulse 애니메이션의 실제 동작을 정의합니다. */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 232, 98, 0); /* 그림자 약함 */
+    }
+    50% {
+        transform: scale(1.05); /* 요소를 5% 확대 */
+        box-shadow: 0 0 0 5px rgba(255, 235, 121, 0.1); /* 그림자 강함 -> 사라짐 */
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 232, 100, 0.4); /* 다시 약해짐 */
+    }
 }
 /* --- Game 3 전용 --- */
 
@@ -551,14 +592,17 @@ padding-top: 0.4em;
 /* 4. 드래그할 아이템 (z-index: 100) */
 .game3-wrap #draggable-item {
   position: absolute;
-  bottom: 10%;
+  top: 65%;
   left: 50%;
   transform: translateX(-50%);
-  width: 500px; /* !! 조절 !! */
+  width: 600px; /* !! 조절 !! */
   height: auto;
   cursor: grab;
   z-index: 100;
   pointer-events: auto;
+    /* box-shadow: 0 0 15px 5px rgb(141, 255, 255);
+  animation: pulse-blue 1.5s infinite; */
+
 }
 .game3-wrap #draggable-item.dragging {
   cursor: grabbing;
@@ -570,16 +614,29 @@ padding-top: 0.4em;
 .game3-wrap #drag-target-area {
   position: absolute;
   /* (디버깅용) border: 2px dashed rgba(0, 0, 255, 0.7); */
-  background-color: rgba(0, 0, 255, 0.2);
+  /* background-color: rgba(0, 0, 255, 0.2); */
   pointer-events: auto;
   z-index: 50;
 }
 
 /* 6. 활성화된 타겟 영역 시각적 힌트 */
-.game3-wrap #drag-target-area.active {
-  box-shadow: 0 0 15px 5px rgb(0, 255, 255);
-  animation: pulse-blue 1.5s infinite;
+/* .game3-wrap #drag-target-area.active {
+} */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 232, 98, 0); /* 그림자 약함 */
+    }
+    50% {
+        transform: scale(1.05); /* 요소를 5% 확대 */
+        box-shadow: 0 0 0 5px rgba(255, 235, 121, 0.1); /* 그림자 강함 -> 사라짐 */
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 232, 100, 0.4); /* 다시 약해짐 */
+    }
 }
+/* -
 /* @keyframes pulse-blue는 이미 정의됨 (game2에서) */
 
 /* --- Game 3 전용 끝 --- */
@@ -769,56 +826,61 @@ padding-top: 0.4em;
 /* [!! 신규 !!] 3. 상단 문구 */
 .upload-top-text {
   position: absolute;
-  top: 30px;
+  top: 50px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
   
   color: rgb(45, 45, 45);
   font-size: 1.8em;
-  text-shadow: 1px 1px 2px rgba(255,255,255,0.5);
+ 
 }
 
 /* [!! 신규 !!] 4. 좌측 하단 UI (Tip) */
 .upload-bottom-left-ui {
   position: absolute;
-  bottom: 30px;
-  left: 30px;
-  z-index: 10;
+  left: 50px;
   
-  width: 300px; /* (조절) UI 이미지 너비 */
-  position: relative;
+  /* [!! 수정 !!] 'top: 50%' -> 'bottom: 20px'로 되돌림 */
+  bottom: 50px;
+  /* transform: translateY(-50%); (삭제) */
+
+  z-index: 10;
+  width: 700px; /* (!! 조절 !!) UI 이미지 너비 */
 }
+
 .upload-bottom-left-ui img {
   width: 100%;
   height: auto;
 }
 .upload-bottom-left-ui p {
   position: absolute;
-  top: 50%; /* (조절) 텍스트 위치 */
-  left: 50%; /* (조절) 텍스트 위치 */
-  transform: translate(-50%, -50%);
-  
-  margin: 0;
+  top: 60px;
+  left: 60px;
+  right: 50px;
   font-size: 1.1em;
   color: rgb(45, 45, 45);
-  width: 80%;
-  text-align: center;
+  margin: 0;
+
+  line-height: 1.5;
+  word-break: keep-all;
+  letter-spacing: -0.05em;
+  
 }
 
 /* [!! 신규 !!] 5. 우측 하단 UI (버튼 2개) */
 .upload-bottom-right-ui {
   position: absolute;
-  bottom: 30px;
-  right: 30px;
+  bottom: 50px;
+  right: 60px;
   z-index: 10;
   
   display: flex;
   flex-direction: column; /* 버튼을 세로로 배치 */
-  gap: 10px;
+  gap: 5px;
 }
 .upload-button {
-  width: 150px; /* (조절) 버튼 크기 */
+  width: 200px; /* (조절) 버튼 크기 */
   height: 60px; /* (조절) 버튼 크기 */
   background-size: contain;
   background-repeat: no-repeat;
@@ -831,13 +893,23 @@ padding-top: 0.4em;
 }
 /* (!! 경로 수정 !!) */
 #btn-show-images {
-  background-image: url('./assets/ui/upload3d/btn_images_idle.png');
+  background-image: url('./assets/ui/upload3d/letter_btn.png');
 }
 #btn-go-landing {
-  background-image: url('./assets/ui/upload3d/btn_landing_idle.png');
+  background-image: url('./assets/ui/upload3d/out_btn.png');
+}
+#btn-show-images:hover {
+  background-image: url('./assets/ui/upload3d/letter_btn_hover.png'); 
+  transform: scale(0.95); /* [!!] translateX 제거 */
+}
+#btn-go-landing:hover {
+  background-image: url('./assets/ui/upload3d/out_btn_hover.png'); 
+  transform: scale(0.95); /* [!!] translateX 제거 */
 }
 
-/* [!! 신규 !!] 6. 이미지 슬라이더 (전체 화면 오버레이) */
+
+
+/* [!! 수정 !!] 6. 이미지 슬라이더 (전체 화면 오버레이) - 3D 캔버스 컨테이너로 변경 */
 .upload-image-slider {
   position: absolute;
   top: 0;
@@ -845,27 +917,28 @@ padding-top: 0.4em;
   width: 100%;
   height: 100%;
   z-index: 100;
-  background: rgba(0, 0, 0, 0.8); /* 반투명 검은 배경 */
+  background: rgba(0, 0, 0, 0.8); /* 불투명한 배경 */
   
   display: grid; /* JS가 none -> grid로 변경 */
-  grid-template-columns: 100px 1fr 100px; /* 이전 / 이미지 / 다음 */
-  align-items: center;
-  justify-items: center;
+  place-items: center; /* 내부 요소를 중앙에 배치 */
 }
-#slider-image {
-  max-width: 90%;
-  max-height: 90vh;
-  object-fit: contain;
-  background: #111;
-  border-radius: 8px;
+/* 이미지 슬라이더의 중앙 영역에 3D 판 캔버스를 담을 #board-stage 스타일 추가 */
+#board-stage {
+    width: 100vw;
+    height: 100vh;
+    /* max-width: 1000px;
+    max-height: 800px; */
+    display: grid;
+    place-items: center;
 }
-.slider-nav {
-  font-size: 4em;
-  color: white;
-  cursor: pointer;
-  user-select: none;
-  padding: 20px;
+#board-stage canvas {
+    width: 100%;
+    height: 100%;
 }
+
+/* 기존 슬라이더 요소 제거 (prev/next/image) */
+/* #slider-image, .slider-nav 는 제거 */
+
 .slider-close-btn {
   position: absolute;
   top: 20px;

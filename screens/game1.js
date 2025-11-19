@@ -8,7 +8,7 @@ export default {
     const dialogueSteps = [
       { dialogue: `지금 큰일 났어요!! 웹사이트들의 화면 밝기가 너무 높아서
 디지털 탄소가 쌓이고, 그 영향으로 정원이 점점 뜨겁게 달아오르고 있어요. `, leftText: '어떡해?', rightText: '해결방법 알려줘' },
-      { dialogue: '스위치를 눌러 밝은 창을 모두 닫아주면 정원이 다시 숨을 쉴 수 있을 거예요.', leftText: '알겠어!', rightText: '무슨 말이야?' }
+      { dialogue: '스위치를 눌러 밝은 창을 모두 닫아주면 정원이 다시 숨을 쉴 수 있을 거예요.', leftText: '알겠어!', rightText: '좋았어!' }
     ];
 
     const videoPaths = [

@@ -438,11 +438,17 @@ html, body {
 }
 .game2-wrap #folded-note:hover { transform: scale(1.1); }
 .game2-wrap #unfolded-note-area {
-  position: relative; width: 400px; height: 500px;
-  background: url('./assets/ui/game2/letter_closed.png') center/contain no-repeat;
+  position: relative; 
+  width: 440.8px; 
+  height: 600.4px;
+  /* [!! 핵심 수정 !!]
+     1. background-size: cover로 변경하여 컨테이너를 완전히 덮도록 함 (이미지가 잘릴 수 있음).
+     2. background-repeat: no-repeat를 명시하여 이미지가 한 번만 나타나도록 함.
+  */
+  background: url('./assets/ui/game2/letter_closed.png') center/cover no-repeat;
 }
 .game2-wrap #note-close-btn {
-  position: absolute; top: 15px; right: 30px; 
+  position: absolute; top: 20px; right: 20px; 
   width: 30px; height: 30px; cursor: pointer;
   transition: transform 0.2s ease;
 }
@@ -462,7 +468,7 @@ html, body {
   z-index: 30;
 }
 .game2-wrap #dragging-item {
-  position: fixed; width: 200px; height: 200px;
+  position: fixed; width: 500px; height: 150px;
   object-fit: contain; pointer-events: none;
   z-index: 9999; transform: translate(-60%, -60%);
 }
@@ -525,7 +531,7 @@ html, body {
     pointer-events: auto; /* ✨ 활성화된 요소만 클릭 허용 */
     cursor: grab;
     box-shadow: 0 0 20px 8px gold;
-    border-radius: 50%; 
+    border-radius: 0%; 
     animation: pulse 10s infinite;
 }
 /* 이 코드가 pulse 애니메이션의 실제 동작을 정의합니다. */
@@ -536,11 +542,11 @@ html, body {
     }
     50% {
         transform: scale(1.05); /* 요소를 5% 확대 */
-        box-shadow: 0 0 0 5px rgba(255, 235, 121, 0.1); /* 그림자 강함 -> 사라짐 */
+        box-shadow: 0 0 0 10px rgba(255, 217, 2, 0.5); /* 그림자 강함 -> 사라짐 */
     }
     100% {
         transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(255, 232, 100, 0.4); /* 다시 약해짐 */
+        box-shadow: 0 0 0 0 rgba(255, 221, 31, 0.9); /* 다시 약해짐 */
     }
 }
 /* --- Game 3 전용 --- */
